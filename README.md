@@ -1,4 +1,4 @@
-# centre-tokens
+# UGDT tokens
 Fiat tokens on the [CENTRE](https://centre.io) network.
 
 # Setup
