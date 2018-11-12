@@ -37,14 +37,17 @@ module.exports = function(deployer, network, accounts) {
             allowanceSheetAddr = await deployer.deploy(AllowanceSheet);
             return balanceSheetAddr
         })
-        .then(function(){
-            balanceSheetAddr.setLogicContractAddress(fiatTokenImpl.address);
-            allowanceSheetAddr.setLogicContractAddress(fiatTokenImpl.address);
+        .then(async function(){
+            await balanceSheetAddr.setLogicContractAddress(fiatTokenImpl.address);
+            await allowanceSheetAddr.setLogicContractAddress(fiatTokenImpl.address);
             return "a"
         })
-        .then(function(){
-            fiatTokenImpl.setAllowanceSheet(allowanceSheetAddr.address);
-            fiatTokenImpl.setBalanceSheet(balanceSheetAddr.address);
+        .then(async function(){
+            console.log("@@ allowanceSheetAddr.address:", allowanceSheetAddr.address);
+            console.log("@@ balanceSheetAddr.address:", balanceSheetAddr.address);
+
+            await fiatTokenImpl.setAllowanceSheet(allowanceSheetAddr.address);
+            await fiatTokenImpl.setBalanceSheet(balanceSheetAddr.address);
             return fiatTokenImpl;
         })
         .then(function(initDone){

@@ -1,7 +1,7 @@
 var FiatTokenV1 = artifacts.require("../combinContract/FiatTokenV2.sol");
-var FiatTokenProxy = artifacts.require("./FiatTokenProxy.sol");
-var AllowanceSheet = artifacts.require("./sheets/AllowanceSheet.sol");
-var BalanceSheet = artifacts.require("./sheets/BalanceSheet.sol");
+var FiatTokenProxy = artifacts.require("../combinContract/FiatTokenProxy.sol");
+var AllowanceSheet = artifacts.require("../combinContract/AllowanceSheet.sol");
+var BalanceSheet = artifacts.require("../combinContract/BalanceSheet.sol");
 
 // Any address will do, preferably one we generated
 // var throwawayAddress = "0x855FA758c77D68a04990E992aA4dcdeF899F654A";
@@ -32,17 +32,20 @@ module.exports = function(deployer, network, accounts) {
                 throwawayAddress
             );
         })
-        .then(async function(_o){
+        .then(async function(){
             balanceSheetAddr = await deployer.deploy(BalanceSheet);
             allowanceSheetAddr = await deployer.deploy(AllowanceSheet);
             return balanceSheetAddr
         })
-        .then(async function(_o){
+        .then(async function(){
             await balanceSheetAddr.setLogicContractAddress(fiatTokenImpl.address);
             await allowanceSheetAddr.setLogicContractAddress(fiatTokenImpl.address);
             return "a"
         })
-        .then(async function(_o){
+        .then(async function(){
+            console.log("@@ allowanceSheetAddr.address:", allowanceSheetAddr.address);
+            console.log("@@ balanceSheetAddr.address:", balanceSheetAddr.address);
+
             await fiatTokenImpl.setAllowanceSheet(allowanceSheetAddr.address);
             await fiatTokenImpl.setBalanceSheet(balanceSheetAddr.address);
             return fiatTokenImpl;
