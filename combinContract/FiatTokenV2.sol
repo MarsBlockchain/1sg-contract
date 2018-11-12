@@ -1,25 +1,112 @@
 pragma solidity ^0.4.24;
 
+// File: openzeppelin-solidity/contracts/token/ERC20/ERC20Basic.sol
+
+/**
+ * @title ERC20Basic
+ * @dev Simpler version of ERC20 interface
+ * See https://github.com/ethereum/EIPs/issues/179
+ */
+contract ERC20Basic {
+  function totalSupply() public view returns (uint256);
+  function balanceOf(address who) public view returns (uint256);
+  function transfer(address to, uint256 value) public returns (bool);
+  event Transfer(address indexed from, address indexed to, uint256 value);
+}
+
+// File: openzeppelin-solidity/contracts/token/ERC20/ERC20.sol
+
+/**
+ * @title ERC20 interface
+ * @dev see https://github.com/ethereum/EIPs/issues/20
+ */
+contract ERC20 is ERC20Basic {
+  function allowance(address owner, address spender)
+    public view returns (uint256);
+
+  function transferFrom(address from, address to, uint256 value)
+    public returns (bool);
+
+  function approve(address spender, uint256 value) public returns (bool);
+  event Approval(
+    address indexed owner,
+    address indexed spender,
+    uint256 value
+  );
+}
+
+// File: openzeppelin-solidity/contracts/math/SafeMath.sol
+
+/**
+ * @title SafeMath
+ * @dev Math operations with safety checks that throw on error
+ */
+library SafeMath {
+
+  /**
+  * @dev Multiplies two numbers, throws on overflow.
+  */
+  function mul(uint256 a, uint256 b) internal pure returns (uint256 c) {
+    // Gas optimization: this is cheaper than asserting 'a' not being zero, but the
+    // benefit is lost if 'b' is also tested.
+    // See: https://github.com/OpenZeppelin/openzeppelin-solidity/pull/522
+    if (a == 0) {
+      return 0;
+    }
+
+    c = a * b;
+    assert(c / a == b);
+    return c;
+  }
+
+  /**
+  * @dev Integer division of two numbers, truncating the quotient.
+  */
+  function div(uint256 a, uint256 b) internal pure returns (uint256) {
+    // assert(b > 0); // Solidity automatically throws when dividing by 0
+    // uint256 c = a / b;
+    // assert(a == b * c + a % b); // There is no case in which this doesn't hold
+    return a / b;
+  }
+
+  /**
+  * @dev Subtracts two numbers, throws on overflow (i.e. if subtrahend is greater than minuend).
+  */
+  function sub(uint256 a, uint256 b) internal pure returns (uint256) {
+    assert(b <= a);
+    return a - b;
+  }
+
+  /**
+  * @dev Adds two numbers, throws on overflow.
+  */
+  function add(uint256 a, uint256 b) internal pure returns (uint256 c) {
+    c = a + b;
+    assert(c >= a);
+    return c;
+  }
+}
+
 // File: contracts/Ownable.sol
 
 /**
 * Copyright CENTRE SECZ 2018
 *
-* Permission is hereby granted, free of charge, to any person obtaining a copy
-* of this software and associated documentation files (the "Software"), to deal
-* in the Software without restriction, including without limitation the rights
-* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the Software is furnished to
+* Permission is hereby granted, free of charge, to any person obtaining a copy 
+* of this software and associated documentation files (the "Software"), to deal 
+* in the Software without restriction, including without limitation the rights 
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+* copies of the Software, and to permit persons to whom the Software is furnished to 
 * do so, subject to the following conditions:
 *
-* The above copyright notice and this permission notice shall be included in all
+* The above copyright notice and this permission notice shall be included in all 
 * copies or substantial portions of the Software.
 *
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-* WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+* WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
 * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
@@ -27,7 +114,7 @@ pragma solidity ^0.4.24;
 
 /**
  * @title Ownable
- * @dev The Ownable contract from https://github.com/zeppelinos/labs/blob/master/upgradeability_ownership/contracts/ownership/Ownable.sol
+ * @dev The Ownable contract from https://github.com/zeppelinos/labs/blob/master/upgradeability_ownership/contracts/ownership/Ownable.sol 
  * branch: master commit: 3887ab77b8adafba4a26ace002f3a684c1a3388b modified to:
  * 1) Add emit prefix to OwnershipTransferred event (7/13/18)
  * 2) Replace constructor with constructor syntax (7/13/18)
@@ -91,21 +178,21 @@ contract Ownable {
 /**
 * Copyright CENTRE SECZ 2018
 *
-* Permission is hereby granted, free of charge, to any person obtaining a copy
-* of this software and associated documentation files (the "Software"), to deal
-* in the Software without restriction, including without limitation the rights
-* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the Software is furnished to
+* Permission is hereby granted, free of charge, to any person obtaining a copy 
+* of this software and associated documentation files (the "Software"), to deal 
+* in the Software without restriction, including without limitation the rights 
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+* copies of the Software, and to permit persons to whom the Software is furnished to 
 * do so, subject to the following conditions:
 *
-* The above copyright notice and this permission notice shall be included in all
+* The above copyright notice and this permission notice shall be included in all 
 * copies or substantial portions of the Software.
 *
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-* WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+* WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
 * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
@@ -144,7 +231,7 @@ contract BlackList is Ownable {
 
     /**
      * @dev Checks if account is blacklist
-     * @param _account The address to check
+     * @param _account The address to check    
     */
     function isBlackListed(address _account) public view returns (bool) {
         return blacklist[_account];
@@ -180,21 +267,21 @@ contract BlackList is Ownable {
 /**
 * Copyright CENTRE SECZ 2018
 *
-* Permission is hereby granted, free of charge, to any person obtaining a copy
-* of this software and associated documentation files (the "Software"), to deal
-* in the Software without restriction, including without limitation the rights
-* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the Software is furnished to
+* Permission is hereby granted, free of charge, to any person obtaining a copy 
+* of this software and associated documentation files (the "Software"), to deal 
+* in the Software without restriction, including without limitation the rights 
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+* copies of the Software, and to permit persons to whom the Software is furnished to 
 * do so, subject to the following conditions:
 *
-* The above copyright notice and this permission notice shall be included in all
+* The above copyright notice and this permission notice shall be included in all 
 * copies or substantial portions of the Software.
 *
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-* WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+* WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
 * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
@@ -264,91 +351,74 @@ contract Pausable is Ownable {
 
 }
 
-// File: openzeppelin-solidity/contracts/math/SafeMath.sol
+// File: contracts/sheets/AllowanceSheet.sol
 
-/**
- * @title SafeMath
- * @dev Math operations with safety checks that throw on error
- */
-library SafeMath {
+// A wrapper around the allowanceOf mapping.
+contract AllowanceSheet is Ownable {
+    using SafeMath for uint256;
+    address logicContract;
 
-  /**
-  * @dev Multiplies two numbers, throws on overflow.
-  */
-  function mul(uint256 a, uint256 b) internal pure returns (uint256 c) {
-    // Gas optimization: this is cheaper than asserting 'a' not being zero, but the
-    // benefit is lost if 'b' is also tested.
-    // See: https://github.com/OpenZeppelin/openzeppelin-solidity/pull/522
-    if (a == 0) {
-      return 0;
+    /**
+    * @dev Throws if called by any account other than the owner.
+    */
+    modifier onlyFromAccpet() {
+      require(msg.sender == logicContract);
+      _;
     }
 
-    c = a * b;
-    assert(c / a == b);
-    return c;
-  }
 
-  /**
-  * @dev Integer division of two numbers, truncating the quotient.
-  */
-  function div(uint256 a, uint256 b) internal pure returns (uint256) {
-    // assert(b > 0); // Solidity automatically throws when dividing by 0
-    // uint256 c = a / b;
-    // assert(a == b * c + a % b); // There is no case in which this doesn't hold
-    return a / b;
-  }
+    mapping (address => mapping (address => uint256)) public allowanceOf;
 
-  /**
-  * @dev Subtracts two numbers, throws on overflow (i.e. if subtrahend is greater than minuend).
-  */
-  function sub(uint256 a, uint256 b) internal pure returns (uint256) {
-    assert(b <= a);
-    return a - b;
-  }
+    function addAllowance(address _tokenHolder, address _spender, uint256 _value) public onlyFromAccpet {
+        allowanceOf[_tokenHolder][_spender] = allowanceOf[_tokenHolder][_spender].add(_value);
+    }
 
-  /**
-  * @dev Adds two numbers, throws on overflow.
-  */
-  function add(uint256 a, uint256 b) internal pure returns (uint256 c) {
-    c = a + b;
-    assert(c >= a);
-    return c;
-  }
+    function subAllowance(address _tokenHolder, address _spender, uint256 _value) public onlyFromAccpet {
+        allowanceOf[_tokenHolder][_spender] = allowanceOf[_tokenHolder][_spender].sub(_value);
+    }
+
+    function setAllowance(address _tokenHolder, address _spender, uint256 _value) public onlyFromAccpet {
+        allowanceOf[_tokenHolder][_spender] = _value;
+    }
+
+    function setLogicContractAddress(address _addr) public onlyOwner {
+        logicContract = _addr;
+    }
 }
 
-// File: openzeppelin-solidity/contracts/token/ERC20/ERC20Basic.sol
+// File: contracts/sheets/BalanceSheet.sol
 
-/**
- * @title ERC20Basic
- * @dev Simpler version of ERC20 interface
- * See https://github.com/ethereum/EIPs/issues/179
- */
-contract ERC20Basic {
-  function totalSupply() public view returns (uint256);
-  function balanceOf(address who) public view returns (uint256);
-  function transfer(address to, uint256 value) public returns (bool);
-  event Transfer(address indexed from, address indexed to, uint256 value);
-}
+// A wrapper around the balanceOf mapping.
+contract BalanceSheet is Ownable {
+    using SafeMath for uint256;
+    address logicContract;
 
-// File: openzeppelin-solidity/contracts/token/ERC20/ERC20.sol
+    /**
+    * @dev Throws if called by any account other than the owner.
+    */
+    modifier onlyFromAccpet() {
+      require(msg.sender == logicContract);
+      _;
+    }
 
-/**
- * @title ERC20 interface
- * @dev see https://github.com/ethereum/EIPs/issues/20
- */
-contract ERC20 is ERC20Basic {
-  function allowance(address owner, address spender)
-    public view returns (uint256);
+    mapping (address => uint256) public balanceOf;
 
-  function transferFrom(address from, address to, uint256 value)
-    public returns (bool);
+    function addBalance(address _addr, uint256 _value) public onlyFromAccpet {
+        balanceOf[_addr] = balanceOf[_addr].add(_value);
+    }
 
-  function approve(address spender, uint256 value) public returns (bool);
-  event Approval(
-    address indexed owner,
-    address indexed spender,
-    uint256 value
-  );
+    function subBalance(address _addr, uint256 _value) public onlyFromAccpet {
+        balanceOf[_addr] = balanceOf[_addr].sub(_value);
+    }
+
+    function setBalance(address _addr, uint256 _value) public onlyFromAccpet {
+        balanceOf[_addr] = _value;
+    }
+
+    function setLogicContractAddress(address _addr) public onlyOwner {
+        logicContract = _addr;
+    }
+
 }
 
 // File: contracts/FiatTokenV1.sol
@@ -356,25 +426,27 @@ contract ERC20 is ERC20Basic {
 /**
 * Copyright CENTRE SECZ 2018
 *
-* Permission is hereby granted, free of charge, to any person obtaining a copy
-* of this software and associated documentation files (the "Software"), to deal
-* in the Software without restriction, including without limitation the rights
-* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the Software is furnished to
+* Permission is hereby granted, free of charge, to any person obtaining a copy 
+* of this software and associated documentation files (the "Software"), to deal 
+* in the Software without restriction, including without limitation the rights 
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+* copies of the Software, and to permit persons to whom the Software is furnished to 
 * do so, subject to the following conditions:
 *
-* The above copyright notice and this permission notice shall be included in all
+* The above copyright notice and this permission notice shall be included in all 
 * copies or substantial portions of the Software.
 *
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
 * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-* WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+* WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN 
 * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 pragma solidity ^0.4.24;
+
+
 
 
 
@@ -395,8 +467,8 @@ contract FiatTokenV1 is Ownable, ERC20, Pausable, BlackList {
     address public masterMinter;
     bool internal initialized;
 
-    mapping(address => uint256) internal balances;
-    mapping(address => mapping(address => uint256)) internal allowed;
+    //mapping(address => uint256) internal balances;
+    //mapping(address => mapping(address => uint256)) internal allowed;
     uint256 internal totalSupply_ = 0;
     mapping(address => bool) internal minters;
     mapping(address => uint256) internal minterAllowed;
@@ -406,6 +478,32 @@ contract FiatTokenV1 is Ownable, ERC20, Pausable, BlackList {
     event MinterConfigured(address indexed minter, uint256 minterAllowedAmount);
     event MinterRemoved(address indexed oldMinter);
     event MasterMinterChanged(address indexed newMasterMinter);
+
+    /* made change by masato */
+    BalanceSheet public balances;
+    event BalanceSheetSet(address indexed sheet);
+
+    /**
+    * @dev claim ownership of the balancesheet contract
+    * @param _sheet The address to of the balancesheet to claim.
+    */
+    function setBalanceSheet(address _sheet) public onlyOwner returns (bool) {
+        balances = BalanceSheet(_sheet);
+        //balances.claimOwnership();
+        emit BalanceSheetSet(_sheet);
+        return true;
+    }
+
+    AllowanceSheet public allowances;
+    event AllowanceSheetSet(address indexed sheet);
+
+    function setAllowanceSheet(address _sheet) public onlyOwner returns(bool) {
+        allowances = AllowanceSheet(_sheet);
+        //allowances.claimOwnership();
+        emit AllowanceSheetSet(_sheet);
+        return true;
+    }
+    /* ********************* */
 
     function initialize(
         string _name,
@@ -456,7 +554,9 @@ contract FiatTokenV1 is Ownable, ERC20, Pausable, BlackList {
         require(_amount <= mintingAllowedAmount);
 
         totalSupply_ = totalSupply_.add(_amount);
-        balances[_to] = balances[_to].add(_amount);
+        //balances[_to] = balances[_to].add(_amount);
+        balances.addBalance(_to, _amount);
+
         minterAllowed[msg.sender] = mintingAllowedAmount.sub(_amount);
         emit Mint(msg.sender, _to, _amount);
         emit Transfer(0x0, _to, _amount);
@@ -481,7 +581,7 @@ contract FiatTokenV1 is Ownable, ERC20, Pausable, BlackList {
 
     /**
      * @dev Checks if account is a minter
-     * @param account The address to check
+     * @param account The address to check    
     */
     function isMinter(address account) public view returns (bool) {
         return minters[account];
@@ -493,7 +593,7 @@ contract FiatTokenV1 is Ownable, ERC20, Pausable, BlackList {
      * @param spender address The account spender
     */
     function allowance(address owner, address spender) public view returns (uint256) {
-        return allowed[owner][spender];
+        return allowances.allowanceOf(owner,spender);
     }
 
     /**
@@ -508,7 +608,7 @@ contract FiatTokenV1 is Ownable, ERC20, Pausable, BlackList {
      * @param account address The account
     */
     function balanceOf(address account) public view returns (uint256) {
-        return balances[account];
+        return balances.balanceOf(account);
     }
 
     /**
@@ -516,7 +616,8 @@ contract FiatTokenV1 is Ownable, ERC20, Pausable, BlackList {
      * @return True if the operation was successful.
     */
     function approve(address _spender, uint256 _value) whenNotPaused nonBlackListed(msg.sender) nonBlackListed(_spender) public returns (bool) {
-        allowed[msg.sender][_spender] = _value;
+        //allowed[msg.sender][_spender] = _value;
+        allowances.setAllowance(msg.sender, _spender, _value);
         emit Approval(msg.sender, _spender, _value);
         return true;
     }
@@ -530,12 +631,15 @@ contract FiatTokenV1 is Ownable, ERC20, Pausable, BlackList {
     */
     function transferFrom(address _from, address _to, uint256 _value) whenNotPaused nonBlackListed(_to) nonBlackListed(msg.sender) nonBlackListed(_from) public returns (bool) {
         require(_to != address(0));
-        require(_value <= balances[_from]);
-        require(_value <= allowed[_from][msg.sender]);
+        require(_value <= balances.balanceOf(_from));
+        require(_value <= allowances.allowanceOf(_from, msg.sender));
 
-        balances[_from] = balances[_from].sub(_value);
-        balances[_to] = balances[_to].add(_value);
-        allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_value);
+        //balances[_from] = balances[_from].sub(_value);
+        balances.subBalance(_from, _value);
+        //balances[_to] = balances[_to].add(_value);
+        balances.addBalance(_to, _value);
+        //allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_value);
+        allowances.subAllowance(_from, msg.sender, _value);
         emit Transfer(_from, _to, _value);
         return true;
     }
@@ -548,10 +652,12 @@ contract FiatTokenV1 is Ownable, ERC20, Pausable, BlackList {
     */
     function transfer(address _to, uint256 _value) whenNotPaused nonBlackListed(msg.sender) nonBlackListed(_to) public returns (bool) {
         require(_to != address(0));
-        require(_value <= balances[msg.sender]);
+        require(_value <= balances.balanceOf(msg.sender));
 
-        balances[msg.sender] = balances[msg.sender].sub(_value);
-        balances[_to] = balances[_to].add(_value);
+        //balances[msg.sender] = balances[msg.sender].sub(_value);
+        balances.subBalance(msg.sender, _value);
+        //balances[_to] = balances[_to].add(_value);
+        balances.addBalance(_to, _value);
         emit Transfer(msg.sender, _to, _value);
         return true;
     }
@@ -588,12 +694,13 @@ contract FiatTokenV1 is Ownable, ERC20, Pausable, BlackList {
      * @param _amount uint256 the amount of tokens to be burned
     */
     function burn(uint256 _amount) whenNotPaused onlyMinters nonBlackListed(msg.sender) public {
-        uint256 balance = balances[msg.sender];
+        uint256 balance = balances.balanceOf(msg.sender);
         require(_amount > 0);
         require(balance >= _amount);
 
         totalSupply_ = totalSupply_.sub(_amount);
-        balances[msg.sender] = balance.sub(_amount);
+        //balances[msg.sender] = balance.sub(_amount);
+        balances.subBalance(msg.sender, _amount);
         emit Burn(msg.sender, _amount);
         emit Transfer(msg.sender, address(0), _amount);
     }

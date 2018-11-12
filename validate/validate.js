@@ -59,8 +59,8 @@ async function printMinterInfo(proxiedToken) {
         let balanceOf = await proxiedToken.balanceOf.call(minter);
         print("balanceOf", balanceOf, 0);
 
-        let isBlacklisted = await proxiedToken.isBlacklisted.call(minter);
-        print("isBlacklisted", isBlacklisted, false);
+        let isBlackListed = await proxiedToken.isBlackListed.call(minter);
+        print("isBlackListed", isBlackListed, false);
     }
 }
 
@@ -132,8 +132,8 @@ async function Validate() {
     var pauser = await proxiedToken.pauser.call();
     print("pauser  ", pauser, PAUSER);
 
-    var blacklister = await proxiedToken.blacklister.call();
-    print("blacklister", blacklister, BLACKLISTER);
+    var jury = await proxiedToken.jury.call();
+    print("jury", jury, BLACKLISTER);
 
     await printMinterInfo(proxiedToken);
 }

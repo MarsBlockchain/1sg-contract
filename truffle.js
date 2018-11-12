@@ -12,7 +12,8 @@
  *   },
  */
 var PrivateKeyProvider = require("truffle-privatekey-provider");
-var privateKey = "B0057716D5917BADAF911B193B12B910811C1497B5BADA8D7711F758981C3773";
+//var privateKey = "B0057716D5917BADAF911B193B12B910811C1497B5BADA8D7711F758981C3773";
+var privateKey = "D99B5B29E6DA2528BF458B26237A6CF8655A3E3276C1CDC0DE1F98CEFEE81C01"
 var improvider = new PrivateKeyProvider(privateKey, "https://ropsten.infura.io/SlIQLtR9eBm263Id9uFs");
 
 module.exports = {
@@ -29,7 +30,7 @@ module.exports = {
     ropsten: {
       provider: improvider,
       network_id: 3,
-      gas: 4000000,
+      gas: 6000000,
       gasPrice: 40000000000,
     },
     coverage: {
