@@ -1,9 +1,10 @@
 pragma solidity ^0.4.25;
 
-import "../openzeppelin-solidity/math/SafeMath.sol";
+import "./DelegateContract.sol";
+import "../openzeppelin/math/SafeMath.sol";
 
 // A wrapper around the allowanceOf mapping.
-contract AllowanceSheet {
+contract AllowanceSheet is DelegateContract {
   using SafeMath for uint256;
 
   mapping (address => mapping (address => uint256)) public allowanceOf;
