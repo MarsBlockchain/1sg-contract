@@ -7,6 +7,8 @@ import "./Ownable.sol";
 import "./Blacklistable.sol";
 import "./Pausable.sol";
 
+import "./sheets/BalanceSheet.sol";
+
 /**
  * @title MarsToken
  * @dev ERC20 Token backed by fiat reserves
@@ -21,8 +23,8 @@ contract MarsTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
   address public masterMinter;
   bool internal initialized;
 
-  mapping(address => uint256) internal balances;
-  mapping(address => mapping(address => uint256)) internal allowed;
+  //mapping(address => uint256) internal balances;
+  //mapping(address => mapping(address => uint256)) internal allowed;
   uint256 internal totalSupply_ = 0;
   mapping(address => bool) internal minters;
   mapping(address => uint256) internal minterAllowed;
@@ -32,6 +34,19 @@ contract MarsTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
   event MinterConfigured(address indexed minter, uint256 minterAllowedAmount);
   event MinterRemoved(address indexed oldMinter);
   event MasterMinterChanged(address indexed newMasterMinter);
+
+  BalanceSheet public balances;
+  event BalanceSheetSet(address indexed sheet);
+
+  /**
+  * @dev ownership of the balancesheet contract
+  * @param _sheet The address to of the balancesheet.
+  */
+  function setBalanceSheet(address _sheet) public onlyOwner returns (bool) {
+    balances = BalanceSheet(_sheet);
+    emit BalanceSheetSet(_sheet);
+    return true;
+  }
 
   function initialize(
     string _name,
@@ -82,7 +97,8 @@ contract MarsTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
     require(_amount <= mintingAllowedAmount);
 
     totalSupply_ = totalSupply_.add(_amount);
-    balances[_to] = balances[_to].add(_amount);
+    //balances[_to] = balances[_to].add(_amount);
+    balances.addBalance(_to, _amount);
     minterAllowed[msg.sender] = mintingAllowedAmount.sub(_amount);
     emit Mint(msg.sender, _to, _amount);
     emit Transfer(0x0, _to, _amount);
@@ -119,7 +135,8 @@ contract MarsTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
   * @param spender address The account spender
   */
   function allowance(address owner, address spender) public view returns (uint256) {
-    return allowed[owner][spender];
+    //return allowed[owner][spender];
+    return balances.allowanceOf(owner,spender);
   }
 
   /**
@@ -134,7 +151,8 @@ contract MarsTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
   * @param account address The account
   */
   function balanceOf(address account) public view returns (uint256) {
-    return balances[account];
+    //return balances[account];
+    return balances.balanceOf(account);
   }
 
   /**
@@ -142,7 +160,8 @@ contract MarsTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
   * @return True if the operation was successful.
   */
   function approve(address _spender, uint256 _value) public whenNotPaused notBlacklisted(msg.sender) notBlacklisted(_spender) returns (bool) {
-    allowed[msg.sender][_spender] = _value;
+    //allowed[msg.sender][_spender] = _value;
+    balances.setAllowance(msg.sender, _spender, _value);
     emit Approval(msg.sender, _spender, _value);
     return true;
   }
@@ -156,12 +175,15 @@ contract MarsTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
   */
   function transferFrom(address _from, address _to, uint256 _value) public whenNotPaused notBlacklisted(_to) notBlacklisted(msg.sender) notBlacklisted(_from) returns (bool) {
     require(_to != address(0));
-    require(_value <= balances[_from]);
-    require(_value <= allowed[_from][msg.sender]);
+    require(_value <= balances.balanceOf(_from));
+    require(_value <= balances.allowanceOf(_from, msg.sender));
 
-    balances[_from] = balances[_from].sub(_value);
-    balances[_to] = balances[_to].add(_value);
-    allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_value);
+    //balances[_from] = balances[_from].sub(_value);
+    balances.subBalance(_from, _value);
+    //balances[_to] = balances[_to].add(_value);
+    balances.addBalance(_to, _value);
+    //allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_value);
+    balances.subAllowance(_from, msg.sender, _value);
     emit Transfer(_from, _to, _value);
     return true;
   }
@@ -174,10 +196,12 @@ contract MarsTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
   */
   function transfer(address _to, uint256 _value) public whenNotPaused notBlacklisted(msg.sender) notBlacklisted(_to) returns (bool) {
     require(_to != address(0));
-    require(_value <= balances[msg.sender]);
+    require(_value <= balances.balanceOf(msg.sender));
 
-    balances[msg.sender] = balances[msg.sender].sub(_value);
-    balances[_to] = balances[_to].add(_value);
+    //balances[msg.sender] = balances[msg.sender].sub(_value);
+    balances.subBalance(msg.sender, _value);
+    //balances[_to] = balances[_to].add(_value);
+    balances.addBalance(_to, _value);
     emit Transfer(msg.sender, _to, _value);
     return true;
   }
@@ -214,12 +238,13 @@ contract MarsTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
   * @param _amount uint256 the amount of tokens to be burned
   */
   function burn(uint256 _amount) public whenNotPaused onlyMinters notBlacklisted(msg.sender) {
-    uint256 balance = balances[msg.sender];
+    uint256 balance = balances.balanceOf(msg.sender);
     require(_amount > 0);
     require(balance >= _amount);
 
     totalSupply_ = totalSupply_.sub(_amount);
-    balances[msg.sender] = balance.sub(_amount);
+    //balances[msg.sender] = balance.sub(_amount);
+    balances.subBalance(msg.sender, _amount);
     emit Burn(msg.sender, _amount);
     emit Transfer(msg.sender, address(0), _amount);
   }
