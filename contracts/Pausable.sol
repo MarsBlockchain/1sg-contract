@@ -41,7 +41,7 @@ contract Pausable is Ownable {
   /**
    * @dev called by the owner to pause, triggers stopped state
    */
-  function pause() onlyPauser public {
+  function pause() public onlyPauser {
     paused = true;
     emit Pause();
   }
@@ -49,7 +49,7 @@ contract Pausable is Ownable {
   /**
    * @dev called by the owner to unpause, returns to normal state
    */
-  function unpause() onlyPauser public {
+  function unpause() public onlyPauser {
     paused = false;
     emit Unpause();
   }
@@ -57,7 +57,7 @@ contract Pausable is Ownable {
   /**
    * @dev update the pauser role
    */
-  function updatePauser(address _newPauser) onlyOwner public {
+  function updatePauser(address _newPauser) public onlyOwner {
     require(_newPauser != address(0));
     pauser = _newPauser;
     emit PauserChanged(pauser);

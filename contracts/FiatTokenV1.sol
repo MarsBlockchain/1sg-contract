@@ -74,7 +74,7 @@ contract FiatTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
   * @param _amount The amount of tokens to mint. Must be less than or equal to the minterAllowance of the caller.
   * @return A boolean that indicates if the operation was successful.
   */
-  function mint(address _to, uint256 _amount) whenNotPaused onlyMinters notBlacklisted(msg.sender) notBlacklisted(_to) public returns (bool) {
+  function mint(address _to, uint256 _amount) public whenNotPaused onlyMinters notBlacklisted(msg.sender) notBlacklisted(_to) returns (bool) {
     require(_to != address(0));
     require(_amount > 0);
 
@@ -141,7 +141,7 @@ contract FiatTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
   * @dev Adds blacklisted check to approve
   * @return True if the operation was successful.
   */
-  function approve(address _spender, uint256 _value) whenNotPaused notBlacklisted(msg.sender) notBlacklisted(_spender) public returns (bool) {
+  function approve(address _spender, uint256 _value) public whenNotPaused notBlacklisted(msg.sender) notBlacklisted(_spender) returns (bool) {
     allowed[msg.sender][_spender] = _value;
     emit Approval(msg.sender, _spender, _value);
     return true;
@@ -154,7 +154,7 @@ contract FiatTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
   * @param _value uint256 the amount of tokens to be transferred
   * @return bool success
   */
-  function transferFrom(address _from, address _to, uint256 _value) whenNotPaused notBlacklisted(_to) notBlacklisted(msg.sender) notBlacklisted(_from) public returns (bool) {
+  function transferFrom(address _from, address _to, uint256 _value) public whenNotPaused notBlacklisted(_to) notBlacklisted(msg.sender) notBlacklisted(_from) returns (bool) {
     require(_to != address(0));
     require(_value <= balances[_from]);
     require(_value <= allowed[_from][msg.sender]);
@@ -172,7 +172,7 @@ contract FiatTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
   * @param _value The amount to be transferred.
   * @return bool success
   */
-  function transfer(address _to, uint256 _value) whenNotPaused notBlacklisted(msg.sender) notBlacklisted(_to) public returns (bool) {
+  function transfer(address _to, uint256 _value) public whenNotPaused notBlacklisted(msg.sender) notBlacklisted(_to) returns (bool) {
     require(_to != address(0));
     require(_value <= balances[msg.sender]);
 
@@ -188,7 +188,7 @@ contract FiatTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
   * @param minterAllowedAmount The minting amount allowed for the minter
   * @return True if the operation was successful.
   */
-  function configureMinter(address minter, uint256 minterAllowedAmount) whenNotPaused onlyMasterMinter public returns (bool) {
+  function configureMinter(address minter, uint256 minterAllowedAmount) public whenNotPaused onlyMasterMinter returns (bool) {
     minters[minter] = true;
     minterAllowed[minter] = minterAllowedAmount;
     emit MinterConfigured(minter, minterAllowedAmount);
@@ -200,7 +200,7 @@ contract FiatTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
   * @param minter The address of the minter to remove
   * @return True if the operation was successful.
   */
-  function removeMinter(address minter) onlyMasterMinter public returns (bool) {
+  function removeMinter(address minter) public onlyMasterMinter returns (bool) {
     minters[minter] = false;
     minterAllowed[minter] = 0;
     emit MinterRemoved(minter);
@@ -213,7 +213,7 @@ contract FiatTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
   * amount is less than or equal to the minter's account balance
   * @param _amount uint256 the amount of tokens to be burned
   */
-  function burn(uint256 _amount) whenNotPaused onlyMinters notBlacklisted(msg.sender) public {
+  function burn(uint256 _amount) public whenNotPaused onlyMinters notBlacklisted(msg.sender) {
     uint256 balance = balances[msg.sender];
     require(_amount > 0);
     require(balance >= _amount);
@@ -224,7 +224,7 @@ contract FiatTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
     emit Transfer(msg.sender, address(0), _amount);
   }
 
-  function updateMasterMinter(address _newMasterMinter) onlyOwner public {
+  function updateMasterMinter(address _newMasterMinter) public onlyOwner {
     require(_newMasterMinter != address(0));
     masterMinter = _newMasterMinter;
     emit MasterMinterChanged(masterMinter);
