@@ -21,7 +21,6 @@ contract FiatTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
   uint8 public decimals;
   string public currency;
   address public masterMinter;
-  bool internal initialized;
 
   //mapping(address => uint256) internal balances;
   //mapping(address => mapping(address => uint256)) internal allowed;
@@ -48,21 +47,18 @@ contract FiatTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
     return true;
   }
 
-  function initialize(
+  constructor(
     string _name,
     string _symbol,
     string _currency,
     uint8 _decimals,
     address _masterMinter,
     address _pauser,
-    address _blacklister,
-    address _owner
+    address _blacklister
   ) public {
-    require(!initialized);
     require(_masterMinter != address(0));
     require(_pauser != address(0));
     require(_blacklister != address(0));
-    require(_owner != address(0));
 
     name = _name;
     symbol = _symbol;
@@ -71,8 +67,7 @@ contract FiatTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
     masterMinter = _masterMinter;
     pauser = _pauser;
     blacklister = _blacklister;
-    setOwner(_owner);
-    initialized = true;
+    setOwner(msg.sender);
   }
 
   /**
