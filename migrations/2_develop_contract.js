@@ -15,9 +15,10 @@ var tokenProxy;
 var balanceSheetAddr, allowanceSheetAddr;
 // deploy implementation contract
 deployer.deploy(FiatTokenV1, "SGDT", "SGDT", "SGDT", 18, masterMinter, pauser, blacklister)
-  .then(async function(){
+  .then(async function(impl){
+    fiatTokenImpl = impl;
     balanceSheetAddr = await deployer.deploy(BalanceSheet);
-    return balanceSheetAddr
+    return balanceSheetAddr;
   })
   .then(async function(){
     await balanceSheetAddr.setLogicContractAddress(fiatTokenImpl.address);
