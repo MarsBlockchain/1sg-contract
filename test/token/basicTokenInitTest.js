@@ -1,4 +1,4 @@
-const shouldFail = require('../helpers/shouldFail');
+const shouldFail = require('../../utils/test/helpers/shouldFail');
 const BigNumber = web3.BigNumber;
 require('chai')
   .use(require('chai-bignumber')(BigNumber))
