@@ -174,12 +174,12 @@ contract FiatTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
     require(_value <= balances.balanceOf(_from));
     require(_value <= balances.allowanceOf(_from, msg.sender));
 
+    //allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_value);
+    balances.subAllowance(_from, msg.sender, _value);
     //balances[_from] = balances[_from].sub(_value);
     balances.subBalance(_from, _value);
     //balances[_to] = balances[_to].add(_value);
     balances.addBalance(_to, _value);
-    //allowed[_from][msg.sender] = allowed[_from][msg.sender].sub(_value);
-    balances.subAllowance(_from, msg.sender, _value);
     emit Transfer(_from, _to, _value);
     return true;
   }
