@@ -155,6 +155,7 @@ contract MarsTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
   * @return True if the operation was successful.
   */
   function approve(address _spender, uint256 _value) public whenNotPaused notBlacklisted(msg.sender) notBlacklisted(_spender) returns (bool) {
+    require(_spender != address(0));
     //allowed[msg.sender][_spender] = _value;
     balances.setAllowance(msg.sender, _spender, _value);
     emit Approval(msg.sender, _spender, _value);
