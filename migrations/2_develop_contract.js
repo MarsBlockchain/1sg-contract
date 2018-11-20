@@ -14,21 +14,7 @@ var fiatTokenImpl;
 var tokenProxy;
 var balanceSheetAddr, allowanceSheetAddr;
 // deploy implementation contract
-deployer.deploy(MarsTokenV1)
-  .then(function(impl) {
-    fiatTokenImpl = impl;
-    console.log("initializing main contract")
-    return impl.initialize(
-      "SGDT",
-      "SGDT",
-      "SGDT",
-      18,
-      masterMinter,
-      pauser,
-      blacklister,
-      owner
-    );
-  })
+deployer.deploy(MarsTokenV1, "SGDT", "SGDT", "SGDT", 18, masterMinter, pauser, blacklister)
   .then(async function(){
     balanceSheetAddr = await deployer.deploy(BalanceSheet);
     return balanceSheetAddr
