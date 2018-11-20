@@ -6,6 +6,7 @@ require('chai')
 const MarsTokenV1 = artifacts.require('MarsTokenV1');
 const BalanceSheet = artifacts.require('sheets/BalanceSheet');
 const mock = require('../mock/variable');
+const $zeroToken = mock.$zeroToken;
 
 contract('Test Token Basic Initialization', function() {
   beforeEach(async function () {
@@ -50,7 +51,7 @@ contract('Test Token Basic Initialization', function() {
     });
     it('check totall supply should be 0', async function () {
       let _supply = await this.token.totalSupply.call();
-      _supply.toNumber().should.equal(0);
+      _supply.toString().should.equal($zeroToken);
     });
   });
 })
