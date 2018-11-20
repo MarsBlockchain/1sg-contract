@@ -16,4 +16,8 @@ contract DelegateContract is Ownable {
   function setLogicContractAddress(address _addr) public onlyOwner {
     delegate_ = _addr;
   }
+
+  function isDelegate(address _addr) public view returns(bool) {
+    return _addr == delegate_;
+  }
 }

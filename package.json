@@ -37,6 +37,7 @@
     "truffle-flattener": "^1.2.9",
     "truffle-privatekey-provider": "^0.1.0",
     "truffle": "5.0.0-beta.1",
-    "solc": "0.4.25"
+    "solc": "0.4.25",
+    "web3-utils": "^1.0.0-beta.34"
   }
 }
