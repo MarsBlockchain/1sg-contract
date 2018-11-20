@@ -4,7 +4,7 @@ import "./upgradeability/AdminUpgradeabilityProxy.sol";
 
 /**
  * @title MarsokenProxy
- * @dev This contract proxies FiatToken calls and enables FiatToken upgrades
+ * @dev This contract proxies MarsToken calls and enables MarsToken upgrades
 */
 contract MarsTokenProxy is AdminUpgradeabilityProxy {
   constructor(address _implementation) public AdminUpgradeabilityProxy(_implementation) {

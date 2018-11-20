@@ -8,7 +8,7 @@ contract DelegateContract is Ownable {
   /**
   * @dev Throws if called by any account other than the owner.
   */
-  modifier onlyFromAccpet() {
+  modifier onlyFromAccept() {
     require(msg.sender == delegate_);
     _;
   }
