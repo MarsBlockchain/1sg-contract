@@ -50,5 +50,21 @@ contract('Test mint Token', function() {
       await this.token.mint(mock._masterMinter, $oneToken, {from: mock._masterMinter});
       (await this.token.balanceOf(mock._masterMinter)).toString().should.equal($oneToken);
     })
+  });
+
+  describe('remove minter test', function(){
+    beforeEach(async function () {
+      await this.token.configureMinter(mock._other_account_1, $oneToken, {from: mock._masterMinter});
+    })
+    it('removeMinter test with none masterMinter account', async function(){
+      (await this.token.isMinter(mock._other_account_1)).should.be.equal(true);
+      await shouldFail.reverting(this.token.removeMinter(mock._other_account_1, {from: mock._other_account}));
+      (await this.token.isMinter(mock._other_account_1)).should.be.equal(true);
+    })
+    it('removeMinter test with masterMinter account', async function(){
+      (await this.token.isMinter(mock._other_account_1)).should.be.equal(true);
+      await this.token.removeMinter(mock._other_account_1, {from: mock._masterMinter});
+      (await this.token.isMinter(mock._other_account_1)).should.be.equal(false);
+    })
   })
 })
