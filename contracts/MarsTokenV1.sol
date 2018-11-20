@@ -24,7 +24,7 @@ contract MarsTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
 
   //mapping(address => uint256) internal balances;
   //mapping(address => mapping(address => uint256)) internal allowed;
-  uint256 internal totalSupply_ = 0;
+  //uint256 internal totalSupply_ = 0;
   mapping(address => bool) internal minters;
   mapping(address => uint256) internal minterAllowed;
 
@@ -91,7 +91,8 @@ contract MarsTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
     uint256 mintingAllowedAmount = minterAllowed[msg.sender];
     require(_amount <= mintingAllowedAmount);
 
-    totalSupply_ = totalSupply_.add(_amount);
+    //totalSupply_ = totalSupply_.add(_amount);
+    balances.increaseSupply(_amount);
     //balances[_to] = balances[_to].add(_amount);
     balances.addBalance(_to, _amount);
     minterAllowed[msg.sender] = mintingAllowedAmount.sub(_amount);
@@ -138,7 +139,7 @@ contract MarsTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
   * @dev Get totalSupply of token
   */
   function totalSupply() public view returns (uint256) {
-    return totalSupply_;
+    return balances.totalSupply();
   }
 
   /**
@@ -238,7 +239,8 @@ contract MarsTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
     require(_amount > 0);
     require(balance >= _amount);
 
-    totalSupply_ = totalSupply_.sub(_amount);
+    //totalSupply_ = totalSupply_.sub(_amount);
+    balances.decreaseSupply(_amount);
     //balances[msg.sender] = balance.sub(_amount);
     balances.subBalance(msg.sender, _amount);
     emit Burn(msg.sender, _amount);
