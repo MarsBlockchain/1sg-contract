@@ -1,0 +1,9 @@
+version: '3'
+services:
+  blockchain:
+    image: "trufflesuite/ganache-cli"
+    build: "./ganache"
+    ports: 
+      - "8545:8545"
+    command: ["ganache-cli", "--mnemonic", "myth like bonus scare over problem client lizard pioneer submit female collect","--db", "/var/db"]
+
