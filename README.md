@@ -16,3 +16,9 @@
   * Can burn token
 * Blacklister
   * black list management
+
+### About testing:
+```
+docker-compose up -d blockchain
+./node_modules/.bin/truffle test
+```
