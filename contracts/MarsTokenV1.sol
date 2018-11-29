@@ -260,10 +260,10 @@ contract MarsTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
   */
   function destroyBlackFunds(address _account) public onlyOwner {
     require(blacklisted[_account]);
-    uint256 accountFunds = balances.balanceOf(_account);
-    balances.subBalance(_account, accountFunds);
-    balances.decreaseSupply(accountFunds);
-    emit DestroyedBlackFunds(_account, accountFunds);
+    uint256 _balance = balances.balanceOf(_account);
+    balances.subBalance(_account, _balance);
+    balances.decreaseSupply(_balance);
+    emit DestroyedBlackFunds(_account, _balance);
   }
 
 }
