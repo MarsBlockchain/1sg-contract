@@ -19,7 +19,7 @@ library SafeMath {
     }
 
     c = _a * _b;
-    assert(c / _a == _b);
+    require(c / _a == _b);
     return c;
   }
 
@@ -27,8 +27,8 @@ library SafeMath {
   * @dev Integer division of two numbers, truncating the quotient.
   */
   function div(uint256 _a, uint256 _b) internal pure returns (uint256) {
-    // assert(_b > 0); // Solidity automatically throws when dividing by 0
-    // uint256 c = _a / _b;
+    // Solidity only automatically asserts when dividing by 0
+    require(_b > 0);
     // assert(_a == _b * c + _a % _b); // There is no case in which this doesn't hold
     return _a / _b;
   }
@@ -37,7 +37,7 @@ library SafeMath {
   * @dev Subtracts two numbers, throws on overflow (i.e. if subtrahend is greater than minuend).
   */
   function sub(uint256 _a, uint256 _b) internal pure returns (uint256) {
-    assert(_b <= _a);
+    require(_b <= _a);
     return _a - _b;
   }
 
@@ -46,7 +46,7 @@ library SafeMath {
   */
   function add(uint256 _a, uint256 _b) internal pure returns (uint256 c) {
     c = _a + _b;
-    assert(c >= _a);
+    require(c >= _a);
     return c;
   }
 }
