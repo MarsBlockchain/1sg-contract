@@ -43,21 +43,12 @@ contract('Test destory black funds', function() {
     it('destory the account funds', async function(){
       let account_balance0 = await this.token.balanceOf(mock._other_account_1);
       let totalSupply0 = await this.token.totalSupply();
-      let result = await this.token.destroyBlackFunds(mock._other_account_1, {from: mock._owner});
+      await this.token.destroyBlackFunds(mock._other_account_1, {from: mock._owner});
       (await this.token.balanceOf(mock._other_account_1)).toString().should.equal($zeroToken);
       let totalSupply1 = await this.token.totalSupply();
       let destoryfunds = totalSupply0 - totalSupply1;
       destoryfunds.toString().should.equal(account_balance0.toString());
-      
-      // event test
-      await testDestroyedBlackFundsEvent(result, mock._other_account_1, destoryfunds);
     })
 
-    async function testDestroyedBlackFundsEvent(result, address, destoryfunds) {
-      let log = result.logs[0];
-      assert.equal(log.event, 'DestroyedBlackFunds');
-      assert.equal(log.args._account, address);
-      assert.equal(log.args._balance, destoryfunds);
-    }
   })
 })
