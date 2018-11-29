@@ -9,6 +9,6 @@ async function assertRevert (promise) {
     assert.fail('Expected revert not received');
   }
   
-  module.exports = {
+module.exports = {
     assertRevert,
-  };
+};
