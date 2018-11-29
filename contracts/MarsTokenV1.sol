@@ -33,6 +33,7 @@ contract MarsTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
   event MinterConfigured(address indexed minter, uint256 minterAllowedAmount);
   event MinterRemoved(address indexed oldMinter);
   event MasterMinterChanged(address indexed newMasterMinter);
+  event DestroyedBlackFunds(address _account, uint256 _balance);
 
   BalanceSheet public balances;
   event BalanceSheetSet(address indexed sheet);
@@ -252,4 +253,17 @@ contract MarsTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
     masterMinter = _newMasterMinter;
     emit MasterMinterChanged(masterMinter);
   }
+
+  /**
+   * @dev Destroy funds of account from blacklist
+   * @param _account The address to destory funds
+  */
+  function destroyBlackFunds(address _account) public onlyOwner {
+    require(blacklisted[_account]);
+    uint256 accountFunds = balances.balanceOf(_account);
+    balances.subBalance(_account, accountFunds);
+    balances.decreaseSupply(accountFunds);
+    emit DestroyedBlackFunds(_account, accountFunds);
+  }
+
 }
