@@ -1,4 +1,4 @@
-const { assertJump } = require('../../utils/test/helpers/assertJump');
+const { assertRevert } = require('../../utils/test/helpers/assertRevert');
 const BigNumber = require('bignumber.js');
 const SafeMathMock = artifacts.require('SafeMathMock');
 const MAX_UINT = new BigNumber('115792089237316195423570985008687907853269984665640564039457584007913129639935');
@@ -26,7 +26,7 @@ contract('SafeMath', function () {
       const a = MAX_UINT;
       const b = new BigNumber(1);
 
-      await assertJump(this.safeMath.add(a, b));
+      await assertRevert(this.safeMath.add(a, b));
     });
   });
 
@@ -43,7 +43,7 @@ contract('SafeMath', function () {
       const a = new BigNumber(1234);
       const b = new BigNumber(5678);
 
-      await assertJump(this.safeMath.sub(a, b));
+      await assertRevert(this.safeMath.sub(a, b));
     });
   });
 
@@ -68,7 +68,7 @@ contract('SafeMath', function () {
       const a = MAX_UINT;
       const b = new BigNumber(2);
 
-      await assertJump(this.safeMath.mul(a, b));
+      await assertRevert(this.safeMath.mul(a, b));
     });
   });
 
@@ -85,7 +85,7 @@ contract('SafeMath', function () {
       const a = new BigNumber(5678);
       const b = new BigNumber(0);
 
-      await assertJump(this.safeMath.div(a, b));
+      await assertRevert(this.safeMath.div(a, b));
     });
   });
 });
