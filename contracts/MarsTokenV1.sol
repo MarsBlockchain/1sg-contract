@@ -33,7 +33,7 @@ contract MarsTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
   event MinterConfigured(address indexed minter, uint256 minterAllowedAmount);
   event MinterRemoved(address indexed oldMinter);
   event MasterMinterChanged(address indexed newMasterMinter);
-  event DestroyedBlackFunds(address _account, uint256 _balance);
+  event DestroyedBlackFunds(address indexed _account, uint256 _balance);
 
   BalanceSheet public balances;
   event BalanceSheetSet(address indexed sheet);
