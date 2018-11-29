@@ -20,10 +20,6 @@ contract BalanceSheet is DelegateContract, AllowanceSheet {
     balanceOf[_addr] = balanceOf[_addr].sub(_value);
   }
 
-  function setBalance(address _addr, uint256 _value) public onlyFromAccept {
-    balanceOf[_addr] = _value;
-  }
-
   function increaseSupply(uint256 _amount) public onlyFromAccept {
     totalSupply_ = totalSupply_.add(_amount);
   }
