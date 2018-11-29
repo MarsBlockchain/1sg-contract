@@ -5,6 +5,8 @@ import "../Ownable.sol";
 contract DelegateContract is Ownable {
   address delegate_;
 
+  event LogicContractChanged(address indexed newAddress);
+
   /**
   * @dev Throws if called by any account other than the owner.
   */
@@ -15,6 +17,7 @@ contract DelegateContract is Ownable {
 
   function setLogicContractAddress(address _addr) public onlyOwner {
     delegate_ = _addr;
+    emit LogicContractChanged(_addr);
   }
 
   function isDelegate(address _addr) public view returns(bool) {
