@@ -45,8 +45,8 @@ contract('Test functions during blocked', function() {
     await this.token.blacklist(mock._other_account_2, {from: mock._blacklister});
     // give $tenToken mint allwance to other accounts.
     await this.token.configureMinter(mock._other_account, $tenToken, {from: mock._masterMinter});
-    await this.token.configureMinter(mock._other_account_1, $tenToken, {from: mock._masterMinter});
-    await this.token.configureMinter(mock._other_account_2, $tenToken, {from: mock._masterMinter});
+    // await this.token.configureMinter(mock._other_account_1, $tenToken, {from: mock._masterMinter});
+    // await this.token.configureMinter(mock._other_account_2, $tenToken, {from: mock._masterMinter});
   });
 
   describe('test token basic functions with blacked accounts', function(){
@@ -58,23 +58,45 @@ contract('Test functions during blocked', function() {
     });
 
     it('test mint when sender listed on blacklist', async function(){
+      await this.token.unBlacklist(mock._other_account_2, {from: mock._blacklister});
+      await this.token.configureMinter(mock._other_account_2, $tenToken, {from: mock._masterMinter});
+      await this.token.blacklist(mock._other_account_2, {from: mock._blacklister});
+      (await this.token.isBlacklisted(mock._other_account_2)).should.eq(true);
       await shouldFail.reverting(this.token.mint(mock._other_account_3, $oneToken, {from: mock._other_account_2}));
     });
 
     it('test mint when sender & receiver both listed on blacklist', async function(){
+      await this.token.unBlacklist(mock._other_account_1, {from: mock._blacklister});
+      await this.token.unBlacklist(mock._other_account_2, {from: mock._blacklister});
+      await this.token.configureMinter(mock._other_account_1, $tenToken, {from: mock._masterMinter});
+      await this.token.configureMinter(mock._other_account_2, $tenToken, {from: mock._masterMinter});
+      await this.token.blacklist(mock._other_account_1, {from: mock._blacklister});
+      await this.token.blacklist(mock._other_account_2, {from: mock._blacklister});
+      (await this.token.isBlacklisted(mock._other_account_1)).should.eq(true);
+      (await this.token.isBlacklisted(mock._other_account_2)).should.eq(true);
       await shouldFail.reverting(this.token.mint(mock._other_account_2, $oneToken, {from: mock._other_account_1}));
     });
 
     it('test transfer token when receiver on blacklist', async function(){
+      (await this.token.isBlacklisted(mock._other_account_2)).should.eq(true);
       await shouldFail.reverting(this.token.transfer(mock._other_account_2, $oneToken, {from: mock._other_account}));
     });
 
     it('test transfer token when msg.sender on blacklist', async function(){
+      (await this.token.isBlacklisted(mock._other_account_1)).should.eq(true);
       await shouldFail.reverting(this.token.transfer(mock._other_account_3, $oneToken, {from: mock._other_account_1}));
     });
 
     it('test transfer token when msg.sender & recevier both on blacklist', async function(){
+      (await this.token.isBlacklisted(mock._other_account_1)).should.eq(true);
+      (await this.token.isBlacklisted(mock._other_account_2)).should.eq(true);
       await shouldFail.reverting(this.token.transfer(mock._other_account_2, $oneToken, {from: mock._other_account_1}));
+    });
+
+    it('test configureMinter when target listed on blacklist', async function(){
+      await this.token.blacklist(mock._other_account_1, {from: mock._blacklister});
+      (await this.token.isBlacklisted(mock._other_account_1)).should.eq(true);
+      await shouldFail.reverting(this.token.configureMinter(mock._other_account_1, $tenToken, {from: mock._masterMinter}));
     });
   })
 
@@ -127,6 +149,7 @@ contract('Test functions during blocked', function() {
   describe('test burn', function(){
     beforeEach(async function (){
       // make other_account_1 as minter
+      await this.token.unBlacklist(mock._other_account_1, {from: mock._blacklister});
       await this.token.configureMinter(mock._other_account_1, $twoToken, {from: mock._masterMinter});
     })
     it('test burn fund, when msg.sender not a minter', async function(){
