@@ -39,7 +39,13 @@ contract('Test destory black funds', function() {
       expectEvent.inLogs(logs, 'DestroyedBlackFunds', {
           _account: mock._other_account_1,
           _balance: new BigNumber(account_balance),
-        });
+      });
+
+      expectEvent.inLogs(logs, 'Transfer', {
+          from: mock._other_account_1,
+          to:  mock.ZERO_ADDRESS,
+          value: new BigNumber(account_balance),
+      });
     })
 
   })
