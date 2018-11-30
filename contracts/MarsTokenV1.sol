@@ -210,7 +210,7 @@ contract MarsTokenV1 is Ownable, ERC20, Pausable, Blacklistable {
   * @param minterAllowedAmount The minting amount allowed for the minter
   * @return True if the operation was successful.
   */
-  function configureMinter(address minter, uint256 minterAllowedAmount) public whenNotPaused onlyMasterMinter returns (bool) {
+  function configureMinter(address minter, uint256 minterAllowedAmount) public whenNotPaused onlyMasterMinter notBlacklisted(minter) returns (bool) {
     minters[minter] = true;
     minterAllowed[minter] = minterAllowedAmount;
     emit MinterConfigured(minter, minterAllowedAmount);
