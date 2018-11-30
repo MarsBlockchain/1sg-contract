@@ -1,5 +1,5 @@
 const shouldFail = require('../../utils/test/helpers/shouldFail');
-const BigNumber = web3.BigNumber;
+const BigNumber = require('bignumber.js');
 require('chai')
   .use(require('chai-bignumber')(BigNumber))
   .should();
@@ -44,10 +44,10 @@ contract('Test destory black funds', function() {
       let account_balance0 = await this.token.balanceOf(mock._other_account_1);
       let totalSupply0 = await this.token.totalSupply();
       await this.token.destroyBlackFunds(mock._other_account_1, {from: mock._owner});
-      (await this.token.balanceOf(mock._other_account_1)).toString().should.equal($zeroToken);
+      (await this.token.balanceOf(mock._other_account_1)).should.be.bignumber.equal($zeroToken);
       let totalSupply1 = await this.token.totalSupply();
       let destoryfunds = totalSupply0 - totalSupply1;
-      destoryfunds.toString().should.equal(account_balance0.toString());
+      destoryfunds.should.be.bignumber.equal(account_balance0);
     })
 
   })

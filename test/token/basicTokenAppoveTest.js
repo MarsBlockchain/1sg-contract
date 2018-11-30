@@ -1,5 +1,5 @@
 const shouldFail = require('../../utils/test/helpers/shouldFail');
-const BigNumber = web3.BigNumber;
+const BigNumber = require('bignumber.js');
 require('chai')
   .use(require('chai-bignumber')(BigNumber))
   .should();
@@ -36,17 +36,17 @@ contract('Test appove Token', function() {
   describe('test balanceOf initialize for test', function(){
     it('get balanceOf _masterMinter is 7', async function(){
       let checkAmount = await getTokenMount('7');
-      (await this.token.balanceOf(mock._masterMinter)).toString().should.equal(checkAmount);
+      (await this.token.balanceOf(mock._masterMinter)).should.be.bignumber.equal(checkAmount);
     });
     it('get balanceOf _other_account is 1', async function(){
-      (await this.token.balanceOf(mock._other_account)).toString().should.equal($oneToken);
+      (await this.token.balanceOf(mock._other_account)).should.be.bignumber.equal($oneToken);
     });
     it('get balanceOf _other_account_1 is 2', async function(){
       let checkAmount = await getTokenMount('2');
-      (await this.token.balanceOf(mock._other_account_1)).toString().should.equal(checkAmount);
+      (await this.token.balanceOf(mock._other_account_1)).should.be.bignumber.equal(checkAmount);
     });
     it('get balanceOf _other_account_2 is zero', async function(){
-      (await this.token.balanceOf(mock._other_account_2)).toString().should.equal($zeroToken);
+      (await this.token.balanceOf(mock._other_account_2)).should.be.bignumber.equal($zeroToken);
     });
   })
 
@@ -56,15 +56,15 @@ contract('Test appove Token', function() {
     });
     it('appove one token for _other_account_2', async function(){
       await this.token.approve(mock._other_account_2, $oneToken, {from: mock._masterMinter});
-      (await this.token.allowance(mock._masterMinter, mock._other_account_2)).toString().should.eq($oneToken);
+      (await this.token.allowance(mock._masterMinter, mock._other_account_2)).should.be.bignumber.eq($oneToken);
     });
     it('set appove token form 1 to 10, 10 to 0 in _other_account_2', async function(){
       await this.token.approve(mock._other_account_2, $oneToken, {from: mock._masterMinter});
-      (await this.token.allowance(mock._masterMinter, mock._other_account_2)).toString().should.eq($oneToken);
+      (await this.token.allowance(mock._masterMinter, mock._other_account_2)).should.be.bignumber.eq($oneToken);
       await this.token.approve(mock._other_account_2, $tenToken, {from: mock._masterMinter});
-      (await this.token.allowance(mock._masterMinter, mock._other_account_2)).toString().should.eq($tenToken);
+      (await this.token.allowance(mock._masterMinter, mock._other_account_2)).should.be.bignumber.eq($tenToken);
       await this.token.approve(mock._other_account_2, $zeroToken, {from: mock._masterMinter});
-      (await this.token.allowance(mock._masterMinter, mock._other_account_2)).toString().should.eq($zeroToken);
+      (await this.token.allowance(mock._masterMinter, mock._other_account_2)).should.be.bignumber.eq($zeroToken);
     });
   })
 
@@ -85,26 +85,26 @@ contract('Test appove Token', function() {
     });
 
     it('when transferFrom one token for _other_account_3 and sender did not hold any token', async function() {
-      (await this.token.allowance(mock._masterMinter, mock._other_account_2)).toString().should.equal($oneToken);
+      (await this.token.allowance(mock._masterMinter, mock._other_account_2)).should.be.bignumber.equal($oneToken);
       await this.token.transferFrom(mock._masterMinter, mock._other_account_3, $oneToken, {from: mock._other_account_2});
-      (await this.token.balanceOf(mock._other_account_3)).toString().should.equal($oneToken);
-      (await this.token.allowance(mock._masterMinter, mock._other_account_2)).toString().should.equal($zeroToken);
+      (await this.token.balanceOf(mock._other_account_3)).should.be.bignumber.equal($oneToken);
+      (await this.token.allowance(mock._masterMinter, mock._other_account_2)).should.be.bignumber.equal($zeroToken);
       // test not enough allowance
       await shouldFail.reverting(this.token.transferFrom(mock._masterMinter, mock._other_account_3, $oneToken, {from: mock._other_account_2}));
     });
     it('when transferFrom one token for _other_account_3 and sender had hold some token', async function() {
       let checkAmount = await getTokenMount('2');
-      (await this.token.allowance(mock._masterMinter, mock._other_account_1)).toString().should.equal(checkAmount);
+      (await this.token.allowance(mock._masterMinter, mock._other_account_1)).should.be.bignumber.equal(checkAmount);
       await this.token.transferFrom(mock._masterMinter, mock._other_account_3, $oneToken, {from: mock._other_account_1});
-      (await this.token.balanceOf(mock._other_account_3)).toString().should.equal($oneToken);
+      (await this.token.balanceOf(mock._other_account_3)).should.be.bignumber.equal($oneToken);
       // check balance after transferFrom
-      (await this.token.balanceOf(mock._other_account_1)).toString().should.equal(checkAmount);
-      (await this.token.allowance(mock._masterMinter, mock._other_account_1)).toString().should.equal($oneToken);
+      (await this.token.balanceOf(mock._other_account_1)).should.be.bignumber.equal(checkAmount);
+      (await this.token.allowance(mock._masterMinter, mock._other_account_1)).should.be.bignumber.equal($oneToken);
       // test not enough allowance
       await shouldFail.reverting(this.token.transferFrom(mock._masterMinter, mock._other_account_3, $tenToken, {from: mock._other_account_1}));
     });
     it('when sendFrom owner did not have enough token and spender try to send fund', async function(){
-      (await this.token.allowance(mock._masterMinter, mock._other_account)).toString().should.equal(mock.$hugeToken);
+      (await this.token.allowance(mock._masterMinter, mock._other_account)).should.be.bignumber.equal(mock.$hugeToken);
       await shouldFail.reverting(this.token.transferFrom(mock._masterMinter, mock._other_account_3, $hugeToken, {from: mock._other_account}));
     });
   })

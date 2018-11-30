@@ -1,5 +1,5 @@
 const shouldFail = require('../../utils/test/helpers/shouldFail');
-const BigNumber = web3.BigNumber;
+const BigNumber = require('bignumber.js');
 require('chai')
   .use(require('chai-bignumber')(BigNumber))
   .should();
@@ -76,31 +76,31 @@ contract('Test ownable Token', function() {
     it('mint will failed when paused', async function(){
       await shouldFail.reverting(this.token.mint(mock._other_account_1, $oneToken, {from: mock._other_account_1}));
       let minterAllowed = await this.token.minterAllowance(mock._other_account_1);
-      minterAllowed.toString().should.equal($tenToken);
+      minterAllowed.should.be.bignumber.equal($tenToken);
     })
 
     it('transfer will failed when paused', async function(){
       await shouldFail.reverting(this.token.approve(mock._other_account_5, $oneToken, {from: mock._other_account}));
       let currentBalance = await this.token.balanceOf(mock._other_account);
-      currentBalance.toString().should.equal($oneToken);
+      currentBalance.should.be.bignumber.equal($oneToken);
     })
 
     it('appove will failed when paused', async function(){
       await shouldFail.reverting(this.token.approve(mock._other_account_2, $oneToken, {from: mock._other_account_1}));
       let currentAllowance = await this.token.allowance(mock._other_account_1, mock._other_account_2);
-      currentAllowance.toString().should.equal($zeroToken);
+      currentAllowance.should.be.bignumber.equal($zeroToken);
     })
 
     it('transferFrom will failed when paused', async function(){
       await shouldFail.reverting(this.token.transferFrom(mock._masterMinter, mock._other_account, $oneToken, {from: mock._other_account_3}));
       let currentAllowance = await this.token.allowance(mock._other_account_1, mock._other_account_3);
-      currentAllowance.toString().should.equal($oneToken);
+      currentAllowance.should.be.bignumber.equal($oneToken);
     })
 
     it('burn token will failed when paused', async function(){
       await shouldFail.reverting(this.token.burn($oneToken, {from: mock._masterMinter}));
       let amount = await this.token.balanceOf(mock._masterMinter);
-      amount.toString().should.equal($seventToken);
+      amount.should.be.bignumber.equal($seventToken);
     })
   })
 })

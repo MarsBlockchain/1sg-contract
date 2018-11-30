@@ -1,5 +1,5 @@
 const shouldFail = require('../../utils/test/helpers/shouldFail');
-const BigNumber = web3.BigNumber;
+const BigNumber = require('bignumber.js');
 require('chai')
   .use(require('chai-bignumber')(BigNumber))
   .should();
@@ -42,12 +42,12 @@ contract('Test burn Token', function() {
 
     it('brun token, when account is a minter', async function(){
       await this.token.burn($oneToken, {from: mock._other_account_1});
-      (await this.token.balanceOf(mock._other_account_1)).toString().should.equal($oneToken);
+      (await this.token.balanceOf(mock._other_account_1)).should.be.bignumber.equal($oneToken);
     })
 
     it('brun token, when account is a minter but fund not enough', async function(){
       await shouldFail.reverting(this.token.burn($tenToken, {from: mock._other_account_1}));
-      (await this.token.balanceOf(mock._other_account_1)).toString().should.equal($twoToken);
+      (await this.token.balanceOf(mock._other_account_1)).should.be.bignumber.equal($twoToken);
     })
   })
 })

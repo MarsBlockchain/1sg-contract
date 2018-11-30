@@ -1,5 +1,5 @@
 const shouldFail = require('../../utils/test/helpers/shouldFail');
-const BigNumber = web3.BigNumber;
+const BigNumber = require('bignumber.js');
 require('chai')
   .use(require('chai-bignumber')(BigNumber))
   .should();
@@ -31,12 +31,12 @@ contract('Test mint Token', function() {
     it('set allowance to a minter with other account, will failed', async function(){
       shouldFail.reverting(this.token.configureMinter(mock._other_account, $oneToken, {from: mock._other_account}));
       let mallownace = await this.token.minterAllowance.call(mock._other_account);
-      mallownace.toString().should.equal($zeroToken);
+      mallownace.should.be.bignumber.equal($zeroToken);
     })
     it('set allowance to a minter with masterMinter permission', async function(){
       await this.token.configureMinter(mock._masterMinter, $oneToken, {from: mock._masterMinter});
       let mallownace = await this.token.minterAllowance.call(mock._masterMinter);
-      mallownace.toString().should.equal($oneToken);
+      mallownace.should.be.bignumber.equal($oneToken);
     })
     it('mint token when this account not a minter, will failed', async function(){
       await shouldFail.reverting(this.token.mint(mock._other_account, $oneToken, {from: mock._other_account}));
@@ -48,7 +48,7 @@ contract('Test mint Token', function() {
     it('mint token when this account is a minter and succeeded', async function(){
       await this.token.configureMinter(mock._masterMinter, $oneToken, {from: mock._masterMinter});
       await this.token.mint(mock._masterMinter, $oneToken, {from: mock._masterMinter});
-      (await this.token.balanceOf(mock._masterMinter)).toString().should.equal($oneToken);
+      (await this.token.balanceOf(mock._masterMinter)).should.be.bignumber.equal($oneToken);
     })
   });
 

@@ -1,5 +1,5 @@
 const shouldFail = require('../../utils/test/helpers/shouldFail');
-const BigNumber = web3.BigNumber;
+const BigNumber = require('bignumber.js');
 require('chai')
   .use(require('chai-bignumber')(BigNumber))
   .should();
@@ -125,21 +125,21 @@ contract('Test functions during blocked', function() {
     })
 
     it('test transferFrom, when msg.sender on blacklist', async function(){
-      (await this.token.allowance(mock._other_account_3, mock._other_account_4)).toString().should.equal($twoToken);
+      (await this.token.allowance(mock._other_account_3, mock._other_account_4)).should.be.bignumber.equal($twoToken);
       // sender: _other_account_4 , transferFrom(_other_account_3, _other_account)
       // o, o, x
       await shouldFail.reverting(this.token.transferFrom(mock._other_account_3, mock._other_account, $oneToken, {from: mock._other_account_4}));
     })
 
     it('test transferFrom, when msg.sender on blacklist', async function(){
-      (await this.token.allowance(mock._other_account_5, mock._other_account_3)).toString().should.equal($twoToken);
+      (await this.token.allowance(mock._other_account_5, mock._other_account_3)).should.be.bignumber.equal($twoToken);
       // sender: _other_account_3 , transferFrom(_other_account_5, _other_account)
       // x, o, o
       await shouldFail.reverting(this.token.transferFrom(mock._other_account_5, mock._other_account, $oneToken, {from: mock._other_account_3}));
     })
 
     it('test transferFrom, when msg.sender on blacklist', async function(){
-      (await this.token.allowance(mock._other_account, mock._other_account_3)).toString().should.equal($twoToken);
+      (await this.token.allowance(mock._other_account, mock._other_account_3)).should.be.bignumber.equal($twoToken);
       // sender: _other_account_3 , transferFrom(_other_account, _other_account_4)
       // o, x, o
       await shouldFail.reverting(this.token.transferFrom(mock._other_account, mock._other_account_4, $oneToken, {from: mock._other_account_3}));

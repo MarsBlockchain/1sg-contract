@@ -1,5 +1,5 @@
 const shouldFail = require('../../utils/test/helpers/shouldFail');
-const BigNumber = web3.BigNumber;
+const BigNumber = require('bignumber.js');
 require('chai')
   .use(require('chai-bignumber')(BigNumber))
   .should();
@@ -31,14 +31,14 @@ contract('Test transfer Token', function() {
 
   describe('balanceOf', function(){
     it('get balanceOf', async function(){
-      (await this.token.balanceOf(mock._masterMinter)).toString().should.equal($tenToken);
+      (await this.token.balanceOf(mock._masterMinter)).should.be.bignumber.equal($tenToken);
     })
     it('get balanceOf is zero', async function(){
-      (await this.token.balanceOf(mock._other_account)).toString().should.equal($zeroToken);
+      (await this.token.balanceOf(mock._other_account)).should.be.bignumber.equal($zeroToken);
     })
     it('get balanceOf, after got token.', async function(){
       await this.token.transfer(mock._other_account, $oneToken, {from: mock._masterMinter});
-      (await this.token.balanceOf(mock._other_account)).toString().should.equal($oneToken);
+      (await this.token.balanceOf(mock._other_account)).should.be.bignumber.equal($oneToken);
     })
   })
 

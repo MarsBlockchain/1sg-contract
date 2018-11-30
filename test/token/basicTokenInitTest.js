@@ -1,5 +1,5 @@
 const shouldFail = require('../../utils/test/helpers/shouldFail');
-const BigNumber = web3.BigNumber;
+const BigNumber = require('bignumber.js');
 require('chai')
   .use(require('chai-bignumber')(BigNumber))
   .should();
@@ -51,7 +51,7 @@ contract('Test Token Basic Initialization', function() {
     });
     it('check totall supply should be 0', async function () {
       let _supply = await this.token.totalSupply.call();
-      _supply.toString().should.equal($zeroToken);
+      _supply.should.be.bignumber.equal($zeroToken);
     });
   });
 })

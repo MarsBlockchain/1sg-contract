@@ -1,5 +1,5 @@
 const shouldFail = require('../../utils/test/helpers/shouldFail');
-const BigNumber = web3.BigNumber;
+const BigNumber = require('bignumber.js');
 require('chai')
   .use(require('chai-bignumber')(BigNumber))
   .should();
@@ -41,7 +41,7 @@ contract('Test balanceSheet', function() {
     });
 
     it('check balaceSheet balanceOf with main contract balanceOf', async function(){
-      balance0.toString().should.equal(balance1.toString());
+      balance0.should.be.bignumber.equal(balance1);
     });
 
     it('test move fund after change LogicContractAddress', async function(){
@@ -56,14 +56,14 @@ contract('Test balanceSheet', function() {
       await NewbalanceSheet.setLogicContractAddress(this.token.address, {from: mock._other_account});
       balance2 = await this.token.balanceOf(mock._masterMinter);
       balance3 = await NewbalanceSheet.balanceOf.call(mock._masterMinter);
-      balance2.toString().should.equal(balance3.toString());
-      balance2.toString().should.not.equal(balance0.toString());
-      balance2.toString().should.not.equal(balance1.toString());
+      balance2.should.be.bignumber.equal(balance3);
+      balance2.should.not.be.bignumber.equal(balance0);
+      balance2.should.not.be.bignumber.equal(balance1);
 
       //test mint fund after changed balanceSheet
       await mock.initFound(this, $twoToken);
       balance4 = await this.token.balanceOf(mock._masterMinter);
-      balance4.toString().should.equal($twoToken);
+      balance4.should.be.bignumber.equal($twoToken);
     });
   })
 
