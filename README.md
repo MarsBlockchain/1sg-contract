@@ -22,3 +22,10 @@
 docker-compose up -d blockchain
 ./node_modules/.bin/truffle test
 ```
+
+### Compilation
+
+```
+npm install -g truffle-flattener
+truffle-flattener contracts/MarsTokenV2.sol > 1sgd.sol
+```
